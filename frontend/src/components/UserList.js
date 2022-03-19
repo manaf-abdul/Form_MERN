@@ -1,4 +1,5 @@
 import React,{forwardRef,useEffect,useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import MaterialTable from 'material-table'
 import {Container} from 'react-bootstrap'
@@ -45,6 +46,11 @@ import {
   }
 
 const UserList = () => {
+
+  const navigate=useNavigate();
+  // const data=[
+  //   {name:"manaf",email:"manaf@gmail.com",id:"3"}
+  // ]
     const columns=[
         {title:"Name",field:"name",},
         {title:"Email",field:"email",},
@@ -58,20 +64,33 @@ const [users,setUsers]=useState([])
 console.log(users)  
 
 useEffect(()=>{
-    const getData=async()=>{
-        const userData=await axios.get('http://localhost:5000/api/users/userlist')
-        console.log(userData)
-        setUsers(userData.data)
-    }
     getData()
 },[])
+
+const getData=async()=>{
+  const userData=await axios.get('http://localhost:5000/api/users/userlist')
+  console.log(userData)
+  setUsers(userData.data)
+}
     
   return (
     <Container className='pt-5'>  
         <MaterialTable title='UserList'
         data={users}
         columns={columns}
-        icons={tableIcons}/>
+        icons={tableIcons}
+        editable={{
+          onRowDelete: (oldData) => new Promise((resolve, reject) => {
+            //Backend call
+            console.log(oldData._id)
+            axios.delete(`http://localhost:5000/api/users/${oldData._id}`)
+              .then(resp => {
+                getData()
+                resolve()
+              })
+          })
+        }}
+        />
     </Container>    
   )
 }
