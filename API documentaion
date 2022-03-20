@@ -78,7 +78,7 @@
 
     Get the total number and data of users
 
-    Method :  PUT
+    Method :  GET
     URL    :  /api/users/userlist
 
     Response 
