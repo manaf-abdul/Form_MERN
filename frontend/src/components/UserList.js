@@ -1,89 +1,96 @@
-import React,{forwardRef,useEffect,useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import React, { forwardRef, useEffect, useState } from 'react'
+import { useNavigate, Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import MaterialTable from 'material-table'
-import {Container} from 'react-bootstrap'
+import { Container, Col, Button } from 'react-bootstrap'
 import EditIcon from '@mui/icons-material/Edit';
+import ImageIcon from '@mui/icons-material/Image';
 import {
-    AddBox,
-    ArrowDownward,
-    Check,
-    ChevronLeft,
-    ChevronRight,
-    Clear,
-    DeleteOutline,
-    Edit,
-    FilterList,
-    FirstPage,
-    LastPage,
-    Remove,
-    SaveAlt,
-    Search,
-    ViewColumn,
-  } from '@material-ui/icons'
-  
-  const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => (
-      <ChevronRight {...props} ref={ref} />
-    )),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => (
-      <ChevronLeft {...props} ref={ref} />
-    )),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
-  }
+  AddBox,
+  ArrowDownward,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Clear,
+  DeleteOutline,
+  Edit,
+  FilterList,
+  FirstPage,
+  LastPage,
+  Remove,
+  SaveAlt,
+  Search,
+  ViewColumn,
+} from '@material-ui/icons'
+
+const tableIcons = {
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => (
+    <ChevronLeft {...props} ref={ref} />
+  )),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+}
 
 const UserList = () => {
 
-  const navigate=useNavigate();
-  // const data=[
-  //   {name:"manaf",email:"manaf@gmail.com",id:"3"}
-  // ]
-    const columns=[
-        {title:"Name",field:"name",},
-        {title:"Email",field:"email",},
-        {title:"Location",field:"location"},
-        {title:"Mobile",field:"mobile"},
-        {title:"Dob",field:"DOB"},
-    ]
- 
-const [users,setUsers]=useState([])  
-console.log(users)  
+  const navigate = useNavigate();
 
-useEffect(()=>{
+  const [users, setUsers] = useState([])
+  console.log(users)
+
+  useEffect(() => {
     getData()
-},[])
+  }, [])
 
-const getData=async()=>{
-  const userData=await axios.get('http://localhost:5000/api/users/userlist')
-  console.log(userData)
-  setUsers(userData.data)
-}
-    
+  const getData = async () => {
+    const userData = await axios.get('/api/users/userlist')
+    console.log(userData)
+    setUsers(userData.data)
+  }
+
+
+  const columns = [
+    { title: "Name", field: "name", },
+    { title: "Email", field: "email", },
+    { title: "Location", field: "location" },
+    { title: "Mobile", field: "mobile" },
+    { title: "Dob", field: "DOB" },
+    { title: "Image", field: "image.url", render: rowData => <a href={`${rowData.image.url}`} target='blank'>Image</a> }
+  ]
+
   return (
-    <Container className='pt-5'>  
-        <MaterialTable title='UserList'
+    <Container className='pt-5'>
+      <Col className='text-right'>
+        <Button className='my-3' onClick={() => navigate('/register')}>
+          Create User
+        </Button>
+      </Col>
+      <MaterialTable title='User List'
         data={users}
         columns={columns}
         icons={tableIcons}
-        options={{actionsColumnIndex:-1,addRowPosition:"first"}}
+        options={{ actionsColumnIndex: -1, addRowPosition: "first" }}
         editable={{
           onRowDelete: (oldData) => new Promise((resolve, reject) => {
+            console.log(oldData)
             //Backend call
-            axios.delete(`http://localhost:5000/api/users/${oldData._id}`)
+            axios.delete(`/api/users/${oldData._id}`)
               .then(resp => {
                 getData()
                 resolve()
@@ -93,16 +100,15 @@ const getData=async()=>{
         actions={[
           {
             icon: EditIcon,
-            tooltip: 'Save User',
+            tooltip: 'Edit User',
             onClick: (event, rowData) => {
               // Do save operation
-              console.log(rowData._id)
               navigate(`/register/${rowData._id}`)
             }
-          }
+          },
         ]}
-        />
-    </Container>    
+      />
+    </Container>
   )
 }
 

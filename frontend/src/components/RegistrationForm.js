@@ -1,4 +1,5 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Box from '@mui/material/Box';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -11,41 +12,62 @@ function RegistrationForm() {
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('')
   const [category, setCategory] = useState('');
+  const [location,setLocation]= useState('')
   const [categoriesList, setCategoriesList] = useState([]);
   const [email, setEmail] = useState('')
-  const [avatar,setAvatar]=useState('')
-  const [avatarPreview, setAvatarPreview]=useState('/images/default_avatar.jpg')
+  const [avatar, setAvatar] = useState('')
+  const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg')
 
-  const myForm=new FormData()
-  myForm.set('name',name)
-  myForm.set('mobile',mobile)
-  myForm.set('category',category)
-  myForm.set('email',email)
-  myForm.set('image',avatar)
-  myForm.set('DOB',value)
+  const navigate=useNavigate()
+  const params=useParams()
 
-
-  const getCategoryDetails=async()=>{
-      const catData= await axios.get('http://localhost:5000/api/category')
+  const getCategoryDetails = async () => {
+    const catData = await axios.get('/api/category')
     setCategoriesList(catData.data)
     console.log(catData.data)
   }
 
-  useEffect(()=>{
-    getCategoryDetails()
-  },[])
-
-  const submitHandler=async(e)=>{
-    e.preventDefault()
-    const config= { headers: { "Content-Type":"multipart/form-data" } };
-    const updateUser=await axios.post('http://localhost:5000/api/users/',{name,mobile,category,email,value},config)
-    console.log(updateUser)
+  const getUserDetails = async (id) => {
+    const response = await axios.get(`/api/users/${id}`)
+    console.log(response)
+    setName(response.data.name)
+    setMobile(response.data.mobile)
+    setCategory(response.data.jobType)
+    setEmail(response.data.email)
+    setLocation(response.data.location)
+    setAvatarPreview(response.data.image.url)
   }
 
-  // console.log(value)
-  // console.log(category)
+  useEffect(() => {
 
-  const imageHandler =(e)=>{
+  if(params.id){
+    getUserDetails(params.id)
+  }
+    getCategoryDetails()
+  }, [])
+
+  const submitHandler = async (e) => {
+    e.preventDefault()
+    const myForm = new FormData()
+    myForm.set('name', name)
+    myForm.set('mobile', mobile)
+    myForm.set('category', category)
+    myForm.set('email', email)
+    myForm.set('avatar', avatar)
+    myForm.set('DOB', value)
+    myForm.set('location',location)
+    if(params.id){
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
+      const updateUser = await axios.put(`/api/users/${params.id}`, myForm, config)
+         navigate('/')
+    }else{
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
+      const updateUser = await axios.post('/api/users/', myForm, config)
+        navigate('/')
+    }
+  }
+
+  const imageHandler = (e) => {
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -63,8 +85,10 @@ function RegistrationForm() {
     <>
       <div className="App">
         <Container className='pt-5'>
+        <Link className='btn btn-light my-3' to='/'>
+        Go Back
+      </Link>
           <Form onSubmit={submitHandler}>
-
             <h4>Registration</h4>
             <Row className='pt-3'>
               <Col md={6}>
@@ -106,23 +130,24 @@ function RegistrationForm() {
                 </Form.Group>
                 <Form.Group controlId="name">
                   <Form.Label>Location</Form.Label>
-                  <Form.Control
-                    type="name"
-                    placeholder="Enter name"
-                  // value={name}
-                  // onChange={(e) => setName(e.target.value)}
-                  ></Form.Control>
+                  <Form.Check
+                    type='checkbox'
+                    label='Chennai'
+                    value='Chennai'
+                    onChange={(e)=>setLocation(e.target.value)}
+                  />
                 </Form.Group>
               </Col>
               <Col md={6}>
-              <Form.Group controlId="name" id='registerimage'>
+                <Form.Group controlId="name" id='registerimage'>
                   <img src={avatarPreview} alt='avatar Preview'></img>
-                  <Form.Control
-                  className='form-control-sm'
+                  <input
+                    className='form-control-sm'
                     type="file"
-                  // value={name}
-                  onChange={imageHandler}
-                  ></Form.Control>
+                    accept=".jpg,.jpeg,.png,"
+                    // value={name}
+                    onChange={imageHandler}
+                  />
                 </Form.Group>
                 <Form.Group controlId="name">
                   <Form.Label>Email Id</Form.Label>
@@ -134,10 +159,8 @@ function RegistrationForm() {
                     required
                   ></Form.Control>
                 </Form.Group>
-                
                 <Form.Group controlId="name" className='pt-4'>
-
-                <Form.Label>Date of Birth</Form.Label>
+                  <Form.Label>Date of Birth</Form.Label>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DesktopDatePicker
                       label="Custom input"
@@ -155,10 +178,10 @@ function RegistrationForm() {
                   </LocalizationProvider>
                 </Form.Group>
                 <div className='pt-5'>
-                <Button type='submit' variant='primary'>
-                    Update
+                  <Button type='submit' variant='primary'>
+                    Add/Update
                   </Button>
-                  </div>
+                </div>
               </Col>
             </Row>
           </Form>
