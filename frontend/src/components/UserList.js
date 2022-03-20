@@ -71,7 +71,7 @@ const UserList = () => {
     { title: "Location", field: "location" },
     { title: "Mobile", field: "mobile" },
     { title: "Dob", field: "DOB" },
-    { title: "", field: "image.url", render: rowData => <a href={`${rowData.image.url}`} target='blank'>Image</a> }
+    { title: "Image", field: "image.url", render: rowData => <a href={`${rowData.image.url}`} target='blank'>Image</a> }
   ]
 
   return (
