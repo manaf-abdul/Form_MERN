@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
+#registerimage > img{
+  width:10vmax;
+  height:10vmax;
+  border-radius:10%
+}
+#registerimage> Form.Control{
+  display:flex;
+  padding:0
+}
+#registerimage> Form.Control::file-selector-button{
+width:100%;
+z-index: 2;
+height:5vh;
+margin: 0%;
+border:none;
+}
+
