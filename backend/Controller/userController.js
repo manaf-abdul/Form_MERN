@@ -7,8 +7,6 @@ import cloudinary from 'cloudinary'
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-    // console.log(req.files)
-    // console.log(req.body)
     const { name, mobile, email, category, location, DOB } = req.body;
     const userExists = await User.findOne({ email })
 
@@ -16,8 +14,6 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('User already exists')
     }
-    // console.log(typeof value)
-    // console.log(typeof moment(value).format('DD-MM-YYYY'))
     try {
 
     const myCloud=await cloudinary.uploader.upload(req.body.avatar,{
