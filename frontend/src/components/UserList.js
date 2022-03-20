@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import MaterialTable from 'material-table'
-import { Container, Col, Button } from 'react-bootstrap'
+import { Container, Col, Button,Row } from 'react-bootstrap'
 import EditIcon from '@mui/icons-material/Edit';
 import ImageIcon from '@mui/icons-material/Image';
 import {
@@ -71,17 +71,22 @@ const UserList = () => {
     { title: "Location", field: "location" },
     { title: "Mobile", field: "mobile" },
     { title: "Dob", field: "DOB" },
-    { title: "Image", field: "image.url", render: rowData => <a href={`${rowData.image.url}`} target='blank'>Image</a> }
+    { title: "", field: "image.url", render: rowData => <a href={`${rowData.image.url}`} target='blank'>Image</a> }
   ]
 
   return (
     <Container className='pt-5'>
+      <Row>
+      <Col>
+      <h2>User List</h2>
+      </Col>
       <Col className='text-right'>
         <Button className='my-3' onClick={() => navigate('/register')}>
           Create User
         </Button>
       </Col>
-      <MaterialTable title='User List'
+      </Row>
+      <MaterialTable title={'Users'}
         data={users}
         columns={columns}
         icons={tableIcons}
