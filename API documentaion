@@ -1,0 +1,100 @@
+1. User Registration
+
+    Can add new users
+
+    Method :  POST
+    URL    :  /api/users
+
+    REQUEST Parameters 
+
+    name     : User have a name,
+    mobile   : User have a mobile,
+    email    : User have a email,
+    JobType  : User have a job type,
+    location : User have a location,
+    DOB      : User have a date of birth,
+    image    : User have a image,
+
+    RESPONSE 
+
+    201 : Success,
+    400 : {Error:"User already exists"}
+
+
+
+
+2. Delete User
+
+    Can delete an user
+
+    Method : Delete,
+    URL    : /api/users/:id
+
+    Response 
+
+    200:{message:"successfully deleted"}
+    404:{error:"User not Found}
+
+
+
+3. User details
+
+    Get Details of individual user by id
+
+    Method : GET,
+    URL    : /api/users/:id
+
+    Response 
+
+    200:Success
+    404:{error:"User not Found}
+
+
+
+4. Update Users
+
+    Can update details of an individual user by id
+
+    Method :  PUT
+    URL    :  /api/users/:id
+
+    REQUEST Parameters 
+
+    name     : User can have a name,
+    mobile   : User can have a mobile,
+    email    : User can have a email,
+    JobType  : User can have a job type,
+    location : User can have a location,
+    DOB      : User can have a date of birth,
+    image    : User can have a image,
+
+    RESPONSE 
+
+    201 : Success,
+
+
+
+5. UserList
+
+    Get the total number and data of users
+
+    Method :  PUT
+    URL    :  /api/users/userlist
+
+    Response 
+
+    200:Success
+
+
+
+6. Category
+
+    Get the category list 
+
+    Method : GET,
+    URL    : /api/category
+
+    Response 
+
+    200:Success
+
