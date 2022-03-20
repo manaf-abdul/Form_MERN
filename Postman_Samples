@@ -1,0 +1,47 @@
+
+1.Register User
+    POST /api/users/register
+    Content-Type: application/json
+
+        {   
+            "name":"Manaf",
+            "mobile":9995451619,
+            "email":"man@gmail.com",
+            "jobType":"6235636aa396a886d834c7e6",
+            "location":"Chennai",
+            "DOB":"23011996",
+            "image":"/img/pic1.jpg"
+        }
+
+
+2.DeleteUser
+    DELETE /api/users/:id
+
+
+3.Get User Details By Id
+    GET /api/users/:id
+
+
+4.Update user by Id
+    PUT /api/users/:id
+    Content-Type: application/json
+
+        {   
+            "name":"Manaf",
+            "mobile":9995451619,
+            "email":"man@gmail.com",
+            "jobType":"6235636aa396a886d834c7e6",
+            "location":"Chennai",
+            "DOB":"23011996",
+            "image":"/img/pic1.jpg"
+        }
+
+
+5.Get total users
+    GET /api/users/userlist
+
+
+6.Get the total categorylist
+    GET /api/category
+
+
