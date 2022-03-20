@@ -7,9 +7,9 @@ import UserList from './components/UserList';
 function App() {
   return (
     <Router>
-      <Routes>
+      <Routes>                                                                                                                                                                                                                                                                                      
         <Route path='/' element={<UserList/>}/>
-        <Route path='/register' element={<RegistrationForm/>}/>
+        <Route path='/register/:id' element={<RegistrationForm/>}/>
       </Routes>
      
     </Router>

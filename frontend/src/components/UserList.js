@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import MaterialTable from 'material-table'
 import {Container} from 'react-bootstrap'
+import EditIcon from '@mui/icons-material/Edit';
 import {
     AddBox,
     ArrowDownward,
@@ -57,7 +58,6 @@ const UserList = () => {
         {title:"Location",field:"location"},
         {title:"Mobile",field:"mobile"},
         {title:"Dob",field:"DOB"},
-        {title:"Actions"}
     ]
  
 const [users,setUsers]=useState([])  
@@ -79,10 +79,10 @@ const getData=async()=>{
         data={users}
         columns={columns}
         icons={tableIcons}
+        options={{actionsColumnIndex:-1,addRowPosition:"first"}}
         editable={{
           onRowDelete: (oldData) => new Promise((resolve, reject) => {
             //Backend call
-            console.log(oldData._id)
             axios.delete(`http://localhost:5000/api/users/${oldData._id}`)
               .then(resp => {
                 getData()
@@ -90,6 +90,17 @@ const getData=async()=>{
               })
           })
         }}
+        actions={[
+          {
+            icon: EditIcon,
+            tooltip: 'Save User',
+            onClick: (event, rowData) => {
+              // Do save operation
+              console.log(rowData._id)
+              navigate(`/register/${rowData._id}`)
+            }
+          }
+        ]}
         />
     </Container>    
   )

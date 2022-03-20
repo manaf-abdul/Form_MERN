@@ -9,7 +9,6 @@ const registerUser = asyncHandler(async (req, res) => {
     console.log(req.body)
     const {name,mobile,email,jobType,location,DOB,image}=req.body;
     const userExists = await User.findOne({ email })
-    const category=await Category.find()
 
     if (userExists) {
       res.status(400)
@@ -63,5 +62,6 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
   })  
 
+  
 
 export {registerUser,getUsers,deleteUser}
