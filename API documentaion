@@ -18,6 +18,17 @@
     RESPONSE 
 
     201 : Success,
+    {
+    name     : User can have a name,
+    mobile   : User can have a mobile,
+    email    : User can have a email,
+    JobType  : User can have a job type,
+    location : User can have a location,
+    DOB      : User can have a date of birth,
+    image    : User can have a image,
+
+    }
+    
     400 : {Error:"User already exists"}
 
 
